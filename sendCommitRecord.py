@@ -5,8 +5,8 @@ import sys
 import requests
 import json
 
-gitPath = "/Users/ly/aigAndroidSpace/gitLearnPro/"
-lastIdFilePath = gitPath+"lastCommitId"
+gitPath = "/Users/ly/aigAndroidSpace/gitLearnPro"
+lastIdFilePath = gitPath+"/lastCommitId"
 
 docTag = "[doc]"
 

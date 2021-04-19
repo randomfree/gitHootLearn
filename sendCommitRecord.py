@@ -132,12 +132,9 @@ if not lastId:
 print("上次打包的提交记录", lastId)
 formatCommitText = getFormatCommitText(lastId)
 print("上次打包的提交记录", formatCommitText)
-# currentCommitId = getLastGitCommitId()
-# print("currentCommitId:", currentCommitId)
+currentCommitId = getLastGitCommitId()
+print("currentCommitId:", currentCommitId)
 # status_code = sendMsgByRoboto(formatCommitText, currentCommitId)
 
 # if status_code == 200:
-# saveLastCommitId(currentCommitId)
-
-
-# createLastCommitFile()
+saveLastCommitId(currentCommitId)

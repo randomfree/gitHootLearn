@@ -10,6 +10,8 @@ lastIdFilePath = gitPath+"/lastCommitId"
 
 git_get_count_cmd = "git rev-list HEAD --count"
 
+git_get_last_commit_log = "git log -1 --pretty=oneline"
+
 docTag = "[doc]"
 
 # 从git记录中提取commit ID
@@ -30,8 +32,8 @@ def getLastCommitCount() -> str:
     is_exists = os.path.exists(lastIdFilePath)
     print("getLastCommitIdFromFile,isExists:", is_exists)
     if is_exists:
-        file = open(lastIdFilePath)
-        commit_count: str = file.readline()
+        file = open(lastIdFilePath,'r+',encoding="utf-8")
+        commit_count= file.read()
         file.close()
         return commit_count
     else:
@@ -60,10 +62,6 @@ def getFormatCommitText(last_count) -> str:
     if len(commitArr) == 0:
         print("没有需要展示的提交记录")
         sys.exit()
-
-    # packageRecordCommitId = commitArr[len(commitArr)-1].split(" ")[0]
-
-    # print("最后一次提交记录ID", packageRecordCommitId)
 
     commitText = ""
     index = 0
@@ -118,7 +116,7 @@ def saveLastCommitId(lastId):
     f = open(lastIdFilePath, "w", encoding='utf8')
     f.write(lastId)
     f.close()
-    print("last commit id", lastId)
+    print("saveid:", lastId)
 
 
 last_count = getLastCommitCount()
@@ -126,12 +124,15 @@ if not last_count:
     print("没有拿到上次提交记录id")
     sys.exit()
 
-print("上次打包的提交记录", last_count)
+print("上次打包的count", last_count)
 formatCommitText = getFormatCommitText(last_count)
-print("上次打包的提交记录", formatCommitText)
-currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd).read()
-print("currentCommitId:", currentCount)
-# status_code = sendMsgByRoboto(formatCommitText, currentCommitId)
+print("即将展示的记录文案", formatCommitText)
+lastCommitId = os.popen(
+    
+    f"cd {gitPath} && git log -1 --pretty=oneline").read()[:40]
+print("lastCommitId:", lastCommitId)
+# status_code = sendMsgByRoboto(formatCommitText, lastCommitId)
 
 # if status_code == 200:
-saveLastCommitId(currentCount)
+currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd).read()
+saveLastCommitId(str(currentCount))

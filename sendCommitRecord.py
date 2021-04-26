@@ -5,7 +5,7 @@ import sys
 import requests
 import json
 
-gitPath = "/Users/ly/aigAndroidSpace/CuteuProOnlyApp/app"
+gitPath = "/Users/ly/aigAndroidSpace/gitLearnPro"
 lastIdFilePath = gitPath+"/lastCommitId"
 
 git_get_count_cmd = "git rev-list HEAD --count"
@@ -40,10 +40,10 @@ def getLastCommitCount() -> str:
 
 
 def getMidGitLog(lastCount):
-    currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd)
+    currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd).read()
     midCount = int(currentCount)-int(lastCount)
     logsResult = os.popen(
-        f"cd {gitPath} && git log "+"-"+midCount+" --oneline")
+        f"cd {gitPath} && git log "+"-"+str(midCount)+" --oneline")
     res = logsResult.read()
     logsResult.close()
     return res
@@ -121,7 +121,7 @@ def saveLastCommitId(lastId):
     print("last commit id", lastId)
 
 
-last_count = getLastCommitIdFromFile()
+last_count = getLastCommitCount()
 if not last_count:
     print("没有拿到上次提交记录id")
     sys.exit()
@@ -129,7 +129,7 @@ if not last_count:
 print("上次打包的提交记录", last_count)
 formatCommitText = getFormatCommitText(last_count)
 print("上次打包的提交记录", formatCommitText)
-currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd)
+currentCount = os.popen(f"cd {gitPath} && "+git_get_count_cmd).read()
 print("currentCommitId:", currentCount)
 # status_code = sendMsgByRoboto(formatCommitText, currentCommitId)
 
